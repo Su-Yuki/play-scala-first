@@ -63,8 +63,18 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   // }
 
   // ヘッダ情報(show <AbstractController>)
-  def index() = Action {
-    Ok("<title>Hello!</title><h1>Hello!</h1><p>sample</p>")
+  // def index() = Action {
+  //   Ok("<title>Hello!</title><h1>Hello!</h1><p>sample</p>")
+  //     .withHeaders(
+  //       ACCEPT_CHARSET->"utf-8",
+  //       ACCEPT_LANGUAGE->"ja-JP"
+  //     )
+  //     .as("text/html")
+  // }
+
+  // パラ
+  def index(id:Int, name:String) = Action {
+    Ok("<title>Hello!</title><h1>Hello!</h1><p>ID = " + id + ",name = " + name + "</p>")
       .withHeaders(
         ACCEPT_CHARSET->"utf-8",
         ACCEPT_LANGUAGE->"ja-JP"
