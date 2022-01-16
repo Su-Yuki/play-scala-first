@@ -92,23 +92,38 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   // }
 
   // cookie
-  def index(name:Option[String]) = Action {request =>
+  // def index(name:Option[String]) = Action {request =>
+  //   val param:String = name.getOrElse("");
+  //   var message = "<p>no name</p>"
+  //   if(param != ""){
+  //     message = "<p>send message</p>"
+  //   }
+  //   val cookie = request.cookies.get("name")
+  //   message += "<p>cookie: " + cookie.getOrElse(Cookie("name", "no-cookie.")).value + "</p>"
+  //   val res = Ok("<title>Hello!</title><h1>hello!</h1>" + message).as("text/html")
+  //   if(param != ""){
+  //     res.withCookies(Cookie("name", param)).bakeCookies()
+  //   } else {
+  //     res
+  //   }
+  // }
+
+  // session
+  def index(name:Option[String]) = Action { request =>
     val param:String = name.getOrElse("");
-    var message = "<p>no name</p>"
-    if(param != ""){
+    var message = "<p>no message</p>"
+    if (param != ""){
       message = "<p>send message</p>"
     }
-    val cookie = request.cookies.get("name")
-    message += "<p>cookie: " + cookie.getOrElse(Cookie("name", "no-cookie.")).value + "</p>"
-    val res = Ok("<title>Hello!</title><h1>hello!</h1>" + message).as("text/html")
-    if(param != ""){
-      res.withCookies(Cookie("name", param)).bakeCookies()
+    val session = request.session.get("name")
+    val sessionvalue = session.getOrElse("no-session")
+    message += "<p>session: " + sessionvalue + "</p>"
+    val res = Ok("<title>Hello!</title><h1>Hello!</h1>" + message).as("text/html")
+    if(param != "") {
+      res.withSession(request.session + ("name" -> param))
     } else {
       res
     }
   }
-
-
-
   
 }
