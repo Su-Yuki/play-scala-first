@@ -7,7 +7,9 @@
 # GET     /                           controllers.HomeController.index()
 # URLにパラを用意　/:<name>
 # GET     /:id               controllers.HomeController.index(id:Int)
-GET     /:id+:name               controllers.HomeController.index(id:Int, name:String)
+# GET     /:id+:name               controllers.HomeController.index(id:Int, name:String)
+# GET     /:id               controllers.HomeController.index(id:Int, name:Option[String])
+GET     /                           controllers.HomeController.index(name:Option[String])
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

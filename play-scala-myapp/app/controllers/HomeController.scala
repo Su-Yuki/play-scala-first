@@ -73,15 +73,42 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   // }
 
   // パラ
-  def index(id:Int, name:String) = Action {
-    Ok("<title>Hello!</title><h1>Hello!</h1><p>ID = " + id + ",name = " + name + "</p>")
-      .withHeaders(
-        ACCEPT_CHARSET->"utf-8",
-        ACCEPT_LANGUAGE->"ja-JP"
-      )
-      .as("text/html")
+  // def index(id:Int, name:String) = Action {
+  //   Ok("<title>Hello!</title><h1>Hello!</h1><p>ID = " + id + ",name = " + name + "</p>")
+  //     .withHeaders(
+  //       ACCEPT_CHARSET->"utf-8",
+  //       ACCEPT_LANGUAGE->"ja-JP"
+  //     )
+  //     .as("text/html")
+  // }
+  // パラ
+  // def index(id:Int, name:Option[String]) = Action {
+  //   Ok("<title>Hello!</title><h1>Hello!</h1><p>ID = " + id + ",name = " + name.getOrElse("no-name") + "</p>")
+  //     .withHeaders(
+  //       ACCEPT_CHARSET->"utf-8",
+  //       ACCEPT_LANGUAGE->"ja-JP"
+  //     )
+  //     .as("text/html")
+  // }
+
+  // cookie
+  def index(name:Option[String]) = Action {request =>
+    val param:String = name.getOrElse("");
+    var message = "<p>no name</p>"
+    if(param != ""){
+      message = "<p>send message</p>"
+    }
+    val cookie = request.cookies.get("name")
+    message += "<p>cookie: " + cookie.getOrElse(Cookie("name", "no-cookie.")).value + "</p>"
+    val res = Ok("<title>Hello!</title><h1>hello!</h1>" + message).as("text/html")
+    if(param != ""){
+      res.withCookies(Cookie("name", param)).bakeCookies()
+    } else {
+      res
+    }
   }
 
 
 
+  
 }
