@@ -7,6 +7,7 @@ import play.api.mvc._
 // 
 import akka.util._
 import play.api.http._
+import java.util._
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -26,6 +27,10 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   // def index() = Action { implicit request: Request[AnyContent] =>
   //   Ok(views.html.index())
   // }
+
+  def index() = Action {
+    Ok(views.html.index(123, "sample-name", "sample-pass", Calendar.getInstance))
+  }
 
   // def index() = Action {
   //   Ok("Welcome!!!")
@@ -109,21 +114,21 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   // }
 
   // session
-  def index(name:Option[String]) = Action { request =>
-    val param:String = name.getOrElse("");
-    var message = "<p>no message</p>"
-    if (param != ""){
-      message = "<p>send message</p>"
-    }
-    val session = request.session.get("name")
-    val sessionvalue = session.getOrElse("no-session")
-    message += "<p>session: " + sessionvalue + "</p>"
-    val res = Ok("<title>Hello!</title><h1>Hello!</h1>" + message).as("text/html")
-    if(param != "") {
-      res.withSession(request.session + ("name" -> param))
-    } else {
-      res
-    }
-  }
+  // def index(name:Option[String]) = Action { request =>
+  //   val param:String = name.getOrElse("");
+  //   var message = "<p>no message</p>"
+  //   if (param != ""){
+  //     message = "<p>send message</p>"
+  //   }
+  //   val session = request.session.get("name")
+  //   val sessionvalue = session.getOrElse("no-session")
+  //   message += "<p>session: " + sessionvalue + "</p>"
+  //   val res = Ok("<title>Hello!</title><h1>Hello!</h1>" + message).as("text/html")
+  //   if(param != "") {
+  //     res.withSession(request.session + ("name" -> param))
+  //   } else {
+  //     res
+  //   }
+  // }
   
 }
