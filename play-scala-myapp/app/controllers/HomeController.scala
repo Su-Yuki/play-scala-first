@@ -28,13 +28,13 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   //   Ok(views.html.index())
   // }
 
-  def index() = Action {
-    Ok(views.html.index(123, "sample-name", "sample-pass", Calendar.getInstance))
-  }
-
   // def index() = Action {
-  //   Ok("Welcome!!!")
+  //   Ok(views.html.index(123, "sample-name", "sample-pass", Calendar.getInstance))
   // }
+
+  def index() = Action {
+    Ok(views.html.index("Welcome!!!"))
+  }
 
   // とりあえずページに表示を出す（テストなど）
   // def index() = TODO

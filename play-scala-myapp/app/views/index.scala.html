@@ -1,16 +1,6 @@
-@(id:Int, name: String, pass:String, cal:java.util.Calendar)
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Document</title>
-  <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
-</head>
-<body>
-  <h1>Index</h1>
-  <p>id: @id</p>
-  <p>Name: @name</p>
-  <p>pass: @pass</p>
-  <p>@cal.getTime()</p>
-</body>
-</html>
+@(message:String)
+@main("Index Page", "Hello", "copyright 2018.") {
+  <p>welcome to Play!</p>
+  <p>これは、サンプルで作成したページです。</p>
+  <p>@message</p>
+}
