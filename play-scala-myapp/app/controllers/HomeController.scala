@@ -34,6 +34,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 
   def index() = Action {
     Ok(views.html.index("Welcome!!!"))
+    
   }
 
   // とりあえずページに表示を出す（テストなど）
