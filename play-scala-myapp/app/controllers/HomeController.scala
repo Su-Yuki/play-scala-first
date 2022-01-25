@@ -7,7 +7,7 @@ import play.api.mvc._
 // 
 import akka.util._
 import play.api.http._
-import java.util._
+
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -32,10 +32,11 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   //   Ok(views.html.index(123, "sample-name", "sample-pass", Calendar.getInstance))
   // }
 
-  def index() = Action {
-    Ok(views.html.index("Welcome!!!"))
-    
-  }
+  // def index() = Action {
+  //   // Ok(views.html.index("Welcome!!!"))
+  //   Ok(views.html.index("これはコントローラ用意した要素です。"));
+
+  // }
 
   // とりあえずページに表示を出す（テストなど）
   // def index() = TODO
@@ -131,5 +132,21 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   //     res
   //   }
   // }
+
+  def index() = Action {
+    Ok(views.html.index(
+      "これはコントローラー用意したメッセージです。",
+    ))
+  }
+
+  def form() = Action { request => 
+    val form:Option[Map[String, Seq[String]]] =request.body.asFormUrlEncoded
+    val param:Map[String, Seq[String]] = form.getOrElse(Map())
+    val name:String = param.get("name").get(0)
+    val password:String = param.get("pass").get(0)
+    Ok(views.html.index(
+      "name: " + name + ", password: " + password
+    ))
+  }
   
 }

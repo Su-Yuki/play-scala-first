@@ -1,6 +1,24 @@
 @(message:String)
-@main("Index Page", "Hello", "copyright 2018.") {
-  <p>welcome to Play!</p>
-  <p>これは、サンプルで作成したページです。</p>
+@makeForm = {
+  <form action="/form" method="post">
+    <table>
+      <tr>
+        <th>name</th>
+        <td><input type="text" name="name"></td>
+      </tr>
+      <tr>
+        <th>Pass</th>
+        <td><input type="password" name="pass"></td>
+      </tr>
+      <tr>
+        <th></th>
+        <td><input type="submit" value="send form"></td>
+      </tr>
+    </table>
+  </form>
+}
+
+@main("Index Page", "Hello", "copyright 2022"){
   <p>@message</p>
+  @makeForm
 }
