@@ -6,9 +6,10 @@ create table people (
     , tel varchar(255) 
 );
 
-insert into people values (default, 'taro', 'taro@example.com', '111-111');
-insert into people values (default, 'hana', 'hana@example.com', '222-222');
-insert into people values (default, 'saki', 'saki@example.com', '333-333');
+insert into people values 
+(default, "taro", "taro@example.com", "111-111")
+,(default, "hana", "hana@example.com", "222-222")
+,(default, "saki", "saki@example.com", "333-333");
 
 # --- !Downs
 drop table people
