@@ -3,6 +3,8 @@ package controllers
 import javax.inject._
 import play.api._
 import play.api.mvc._
+import play.api.data._
+import play.api.data.Forms._
 
 // 
 import akka.util._
@@ -14,7 +16,9 @@ import play.api.http._
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+// class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+class HomeController @Inject()(cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
+  import MyForm._
 
   /**
    * Create an Action to render an HTML page.
@@ -35,7 +39,6 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   // def index() = Action {
   //   // Ok(views.html.index("Welcome!!!"))
   //   Ok(views.html.index("これはコントローラ用意した要素です。"));
-
   // }
 
   // とりあえずページに表示を出す（テストなど）
@@ -133,19 +136,28 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   //   }
   // }
 
-  def index() = Action {
+  def index() = Action { implicit request =>
     Ok(views.html.index(
       "これはコントローラー用意したメッセージです。",
+      myform
     ))
   }
 
-  def form() = Action { request => 
-    val form:Option[Map[String, Seq[String]]] =request.body.asFormUrlEncoded
-    val param:Map[String, Seq[String]] = form.getOrElse(Map())
-    val name:String = param.get("name").get(0)
-    val password:String = param.get("pass").get(0)
+  // def form() = Action { request => 
+  //   val form:Option[Map[String, Seq[String]]] =request.body.asFormUrlEncoded
+  //   val param:Map[String, Seq[String]] = form.getOrElse(Map())
+  //   val name:String = param.get("name").get(0)
+  //   val password:String = param.get("pass").get(0)
+  //   Ok(views.html.index(
+  //     "name: " + name + ", password: " + password
+  //   ))
+  // }
+  def form() = Action { implicit request =>
+    val form = myform.bindFromRequest
+    val data = form.get
     Ok(views.html.index(
-      "name: " + name + ", password: " + password
+      "name: " + data.name + ", pass: " + data.pass + ", radio: " + data.radio, 
+      form
     ))
   }
   
