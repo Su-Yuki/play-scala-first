@@ -1,10 +1,12 @@
 package controllers
 
+import java.sql._
 import javax.inject._
 import play.api._
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
+import play.api.db._
 
 // 
 import akka.util._
@@ -17,16 +19,33 @@ import play.api.http._
  */
 @Singleton
 // class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
-class HomeController @Inject()(cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
-  import MyForm._
+class HomeController @Inject()(db: Database, cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
+  // import MyForm._
 
   /**
-   * Create an Action to render an HTML page.
-   *
-   * The configuration in the `routes` file means that this method
-   * will be called when the application receives a `GET` request with
-   * a path of `/`.
-   */
+  * Create an Action to render an HTML page.
+  *
+  * The configuration in the `routes` file means that this method
+  * will be called when the application receives a `GET` request with
+  * a path of `/`.
+  */
+
+  def index() = Action { implicit request => 
+    var msg = "database record:<br><ul>"
+    try {
+      db.withConnection { conn => 
+        val stmt = conn.createStatement
+        val rs = stmt.executeQuery("Select * from people")
+        while (rs.next) {
+          msg += "<li>" + rs.getInt("id") + ":" + rs.getString("name") + "</li>"
+        }
+        msg += "</ul>"
+      }
+    } catch {
+      case e:SQLException => msg = "<li>no record....<li>"
+    }
+    Ok(views.html.index(msg))
+  }
 
   // def index() = Action { implicit request: Request[AnyContent] =>
   //   Ok(views.html.index())
@@ -136,12 +155,12 @@ class HomeController @Inject()(cc: MessagesControllerComponents) extends Message
   //   }
   // }
 
-  def index() = Action { implicit request =>
-    Ok(views.html.index(
-      "これはコントローラー用意したメッセージです。",
-      myform
-    ))
-  }
+  // def index() = Action { implicit request =>
+  //   Ok(views.html.index(
+  //     "これはコントローラー用意したメッセージです。",
+  //     myform
+  //   ))
+  // }
 
   // def form() = Action { request => 
   //   val form:Option[Map[String, Seq[String]]] =request.body.asFormUrlEncoded
@@ -152,13 +171,13 @@ class HomeController @Inject()(cc: MessagesControllerComponents) extends Message
   //     "name: " + name + ", password: " + password
   //   ))
   // }
-  def form() = Action { implicit request =>
-    val form = myform.bindFromRequest
-    val data = form.get
-    Ok(views.html.index(
-      "name: " + data.name + ", pass: " + data.pass + ", radio: " + data.radio, 
-      form
-    ))
-  }
-  
+  // def form() = Action { implicit request =>
+  //   val form = myform.bindFromRequest
+  //   val data = form.get
+  //   Ok(views.html.index(
+  //     "name: " + data.name + ", pass: " + data.pass + ", radio: " + data.radio, 
+  //     form
+  //   ))
+  // }
+
 }
