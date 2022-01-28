@@ -12,6 +12,8 @@
 # GET     /                           controllers.HomeController.index(name:Option[String])
 
 GET / controllers.HomeController.index()
+GET /add controllers.HomeController.add()
+POST /create controllers.HomeController.create()
 # POST /form controllers.HomeController.form()
 
 # Map static resources from the /public folder to the /assets URL path

@@ -12,7 +12,6 @@ import play.api.db._
 import akka.util._
 import play.api.http._
 
-
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -21,6 +20,7 @@ import play.api.http._
 // class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 class HomeController @Inject()(db: Database, cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
   // import MyForm._
+  import PersonForm._
 
   /**
   * Create an Action to render an HTML page.
@@ -29,6 +29,34 @@ class HomeController @Inject()(db: Database, cc: MessagesControllerComponents) e
   * will be called when the application receives a `GET` request with
   * a path of `/`.
   */
+
+  def add() = Action { implicit request =>
+    Ok(views.html.add(
+      "フォームを入力してください"
+      , form
+    ))
+  }
+
+  def create() = Action {implicit request =>
+    val formdata = form.bindFromRequest
+    val data = formdata.get
+    try
+    db.withConnection { conn =>
+      val ps = conn.prepareStatement("Insert into people value (default, ?, ?, ?)")
+      ps.setString(1, data.name)
+      ps.setString(2, data.mail)
+      ps.setString(3, data.tel)
+      ps.executeUpdate
+    }
+    catch {
+      case e: SQLException =>
+      Ok(views.html.add(
+        "フォームを入力してください"
+        , form
+      ))
+    }
+    Redirect(routes.HomeController.index)
+  }
 
   def index() = Action { implicit request => 
     var msg = "database record:<br><ul>"
@@ -47,20 +75,11 @@ class HomeController @Inject()(db: Database, cc: MessagesControllerComponents) e
     Ok(views.html.index(msg))
   }
 
-  // def index() = Action { implicit request: Request[AnyContent] =>
-  //   Ok(views.html.index())
-  // }
-
   // def index() = Action {
   //   Ok(views.html.index(123, "sample-name", "sample-pass", Calendar.getInstance))
   // }
 
-  // def index() = Action {
-  //   // Ok(views.html.index("Welcome!!!"))
-  //   Ok(views.html.index("これはコントローラ用意した要素です。"));
-  // }
-
-  // とりあえずページに表示を出す（テストなど）
+  // // とりあえずページに表示を出す（テストなど）
   // def index() = TODO
 
   // <Result>.as(　コンテンツタイプ　)
@@ -68,17 +87,17 @@ class HomeController @Inject()(db: Database, cc: MessagesControllerComponents) e
   //   Ok("<h1>hello!</h1><p>This is sam</p>").as("text/html")
   // }
 
-  // xml
+  // // xml
   // def index() = Action {
   //   Ok("<root><title>Hello!</title><message>This is sample message.</message></root>").as("text/xml")
   // }
 
-  // json
+  // // json
   // def index() = Action {
   //   Ok("<root><title>Hello!</title><message>This is sample message.</message></root>").as("text/json")
   // }
 
-  // Result
+  // // Result
   // def index() = Action {
   //   Result(
   //     // ヘッダ情報　Result(header(整数) = <ResponsHeader>, body(map) = <HttpEntity>)
@@ -91,7 +110,7 @@ class HomeController @Inject()(db: Database, cc: MessagesControllerComponents) e
   //   )
   // }
 
-  // ヘッダ情報(show <AbstractController>)
+  // // ヘッダ情報(show <AbstractController>)
   // def index() = Action {
   //   Ok("<title>Hello!</title><h1>Hello!</h1><p>sample</p>")
   //     .withHeaders(
@@ -102,15 +121,6 @@ class HomeController @Inject()(db: Database, cc: MessagesControllerComponents) e
   // }
 
   // パラ
-  // def index(id:Int, name:String) = Action {
-  //   Ok("<title>Hello!</title><h1>Hello!</h1><p>ID = " + id + ",name = " + name + "</p>")
-  //     .withHeaders(
-  //       ACCEPT_CHARSET->"utf-8",
-  //       ACCEPT_LANGUAGE->"ja-JP"
-  //     )
-  //     .as("text/html")
-  // }
-  // パラ
   // def index(id:Int, name:Option[String]) = Action {
   //   Ok("<title>Hello!</title><h1>Hello!</h1><p>ID = " + id + ",name = " + name.getOrElse("no-name") + "</p>")
   //     .withHeaders(
@@ -120,7 +130,7 @@ class HomeController @Inject()(db: Database, cc: MessagesControllerComponents) e
   //     .as("text/html")
   // }
 
-  // cookie
+  // // cookie
   // def index(name:Option[String]) = Action {request =>
   //   val param:String = name.getOrElse("");
   //   var message = "<p>no name</p>"
@@ -137,7 +147,7 @@ class HomeController @Inject()(db: Database, cc: MessagesControllerComponents) e
   //   }
   // }
 
-  // session
+  // // session
   // def index(name:Option[String]) = Action { request =>
   //   val param:String = name.getOrElse("");
   //   var message = "<p>no message</p>"
@@ -155,22 +165,6 @@ class HomeController @Inject()(db: Database, cc: MessagesControllerComponents) e
   //   }
   // }
 
-  // def index() = Action { implicit request =>
-  //   Ok(views.html.index(
-  //     "これはコントローラー用意したメッセージです。",
-  //     myform
-  //   ))
-  // }
-
-  // def form() = Action { request => 
-  //   val form:Option[Map[String, Seq[String]]] =request.body.asFormUrlEncoded
-  //   val param:Map[String, Seq[String]] = form.getOrElse(Map())
-  //   val name:String = param.get("name").get(0)
-  //   val password:String = param.get("pass").get(0)
-  //   Ok(views.html.index(
-  //     "name: " + name + ", password: " + password
-  //   ))
-  // }
   // def form() = Action { implicit request =>
   //   val form = myform.bindFromRequest
   //   val data = form.get
