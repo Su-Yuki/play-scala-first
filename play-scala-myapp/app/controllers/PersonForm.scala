@@ -14,3 +14,4 @@ object PersonForm {
         )(Data.apply)(Data.unapply)
     )
 }
+
